@@ -1,0 +1,15 @@
+# 参考 http://www.tuicool.com/articles/veUjQba
+# Web容器配置
+server:
+  port: 8080
+
+
+
+#Repository
+es:
+  #集群名称
+  clusterName: jyall-jygoods
+  #host
+  host: 10.10.33.110,10.10.33.112,10.10.33.113
+  #port
+  port: 9300
