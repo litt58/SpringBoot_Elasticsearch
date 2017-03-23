@@ -1,9 +1,12 @@
 package com.jzli.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jzli.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,9 +43,13 @@ public class UserController {
 
 
     @RequestMapping(value = "search", method = RequestMethod.POST)
-    @ApiOperation(value = "{\"search\":\"search\"}", httpMethod = "POST")
-    public Object search(String search) {
-        return userService.findByNameLikeOrMobileLike(search);
+    @ApiOperation(value = "search", notes = "{\"search\":\"search\"}", httpMethod = "POST")
+    public Object search(@RequestBody JSONObject jsonObject) {
+        if (!ObjectUtils.isEmpty(jsonObject)) {
+            String search = jsonObject.getString("search");
+            return userService.findByNameLikeOrMobileLike(search);
+        }
+        return null;
     }
 
 }
