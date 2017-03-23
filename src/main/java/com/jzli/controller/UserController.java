@@ -43,11 +43,13 @@ public class UserController {
 
 
     @RequestMapping(value = "search", method = RequestMethod.POST)
-    @ApiOperation(value = "search", notes = "{\"search\":\"search\"}", httpMethod = "POST")
+    @ApiOperation(value = "search", notes = "{\"search\":\"search\",\"pageNo\":\"pageNo\",\"pageSize\":\"pageSize\"}", httpMethod = "POST")
     public Object search(@RequestBody JSONObject jsonObject) {
         if (!ObjectUtils.isEmpty(jsonObject)) {
             String search = jsonObject.getString("search");
-            return userService.findByNameLikeOrMobileLike(search);
+            Integer pageNo = jsonObject.getInteger("pageNo");
+            Integer pageSize = jsonObject.getInteger("pageSize");
+            return userService.findByNameLikeOrMobileLike(search, pageNo, pageSize);
         }
         return null;
     }

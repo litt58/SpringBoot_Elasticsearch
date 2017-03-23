@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.UUID;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -25,6 +26,9 @@ import java.util.concurrent.LinkedBlockingDeque;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    private static final Integer default_pageNo = 0;
+    private static final Integer default_pageSize = 10;
 
     /**
      * 保存指定用户名的用户信息到ES中
@@ -59,8 +63,17 @@ public class UserService {
      * @param search
      * @return
      */
-    public Page<User> findByNameLikeOrMobileLike(String search) {
-        Page<User> userEsPage = userRepository.findByNameLikeOrMobileLike(search, search, new PageRequest(0, 15));
+    public Page<User> findByNameLikeOrMobileLike(String search, Integer pageNo, Integer pageSize) {
+        if (ObjectUtils.isEmpty(pageNo)) {
+            pageNo = default_pageNo;
+        } else {
+            pageNo = pageNo - 1;
+        }
+        if (ObjectUtils.isEmpty(pageSize)) {
+            pageSize = default_pageSize;
+        }
+
+        Page<User> userEsPage = userRepository.findByNameLikeOrMobileLike(search, search, new PageRequest(pageNo, pageSize));
         return userEsPage;
     }
 
